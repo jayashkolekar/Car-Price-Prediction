@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<select class="form-control" aria-label="Default select example" name="ComanyName" id="ComanyName" onchange="load(this.id, 'ModelName')">
+  <option selected>Open this select menu</option>
+  <option>One</option>
+</select>
+<select class="form-control" aria-label="Default select example" name="ModelName" id="ModelName">
+  <option selected>Open this select menu</option>
+</select>
+<script !src="">
+    function load(selectCompany, selectModel)
+    {
+        var carCompanies = {{ carCompanies |tojson }};
+        var carModels  = {{ carModels |tojson }};
+        var carCompanies = carCompanies.split(',').map(d=> d.replace(/\[|\]|\'|\'/g, ''));
+        var carModels = carModels .split(',').map(d=> d.replace(/\[|\]|\'|\'/g, ''));
+        console.log(carCompanies)
+        console.log(carModels)
+
+        var company = document.getElementById(selectCompany);
+        var model = document.getElementById(selectModel);
+        company.innerHTML = "";
+        model.innerHTML = "";
+
+         for (var i = 0; i < carCompanies.length; i++){
+            var item = carCompanies[i];
+            var newOption = document.createElement("option");
+            newOption.innerText = item;
+            company.options.add(newOption);
+            }
+
+            for (var i = 0; i < carModels.length; i++){
+            var item = carModels[i];
+            var newOption = document.createElement("option");
+            newOption.innerText = item;
+            model.options.add(newOption);
+            }
+    }
+</script>
+</body>
+</html>

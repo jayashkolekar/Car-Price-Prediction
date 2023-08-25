@@ -1,0 +1,114 @@
+{% include "header.html" %}
+<style>
+  .navbar {
+    background-color: black;
+  }
+</style>
+
+
+<div class="container-fluid form-container">
+
+  <div class="row">
+    <div class="col-lg-6 col-md-12">
+      <div class="row form-row shadow-none p-3 mb-5 bg-light rounded">
+        <div class="col-12 ">
+          <form action="/prediction" method="POST">
+            <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label" >Enter Your Car Company</label>
+              <!--    <input type="company" class="form-control" aria-describedby="emailHelp" name='company'>-->
+              <select class="form-control" aria-label="Default select example" name='company'  id="ComanyName"
+                onchange="load(this.id, 'ModelName')">
+                <option selected>Open this select menu</option>
+                 {%for name in companies:%}
+                  <option value="{{name}}">{{name}}</option>
+                  {%endfor%}
+</select>
+            </div>
+            <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Enter Your Car Model</label>
+              <!--    <input type="model" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='model'>-->
+
+              <select class="form-control" aria-label="Default select example" name='model' id="ModelName">
+                <option selected>Open this select menu</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Enter Your Car Purchase Year</label>
+<!--              <input type="year" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='year'>-->
+                <select  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name='year'>
+                  <option value="2015">2005</option>
+                  <option value="2016">2006</option>
+                  <option value="2017">2007</option>
+                  <option value="2018">2008</option>
+                  <option value="2019">2009</option>
+                  <option value="2020">2010</option>
+                  <option value="2015">2011</option>
+                  <option value="2016">2012</option>
+                  <option value="2017">2013</option>
+                  <option value="2018">2014</option>
+                  <option value="2019">2015</option>
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                </select>
+            </div>
+            <div class="mb-3">
+              <label for="fueltype" class="form-label">Select the Fuel Type</label>
+              <select id="fueltype" class="form-select" name='fueltype'>
+                <option>Diesel</option>
+                <option>Petrol</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">How Much Kilometer Driven</label>
+              <input type="driven" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                name='driven' autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn btn-dark submit-button">Predict</button>
+          </form>
+        </div>
+        <div class="col-12 price">
+          <h3>{{  prediction_price }}</h3>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12 col-lg-6">
+      <img class="Car-img" src="https://wallpaperaccess.com/full/1576583.jpg">
+    </div>
+  </div>
+    <script !src="">
+  function load(selectCompany, selectModel)
+    {
+        var carCompanies = {{ carCompanies |tojson }};
+        var carModels  = {{ carModels |tojson }};
+        var carCompanies = carCompanies.split(',').map(d=> d.replace(/\[|\]|\'|\'/g, ''));
+        var carModels = carModels .split(',').map(d=> d.replace(/\[|\]|\'|\'/g, ''));
+        console.log(carCompanies)
+        console.log(carModels)
+
+        var company = document.getElementById(selectCompany);
+        var model = document.getElementById(selectModel);
+
+         console.log(company.value)
+          model.innerText=""
+         {% for name in companies:%}
+         if(company.value=="{{name}}")
+         {
+
+          {%for carModelName in models:%}
+            {% if name in carModelName:%}
+                    var newOption = document.createElement("option");
+                    newOption.innerText = "{{carModelName}}";
+                    model.options.add(newOption);
+                   console.log("{{carModelName}}")
+             {% endif%}
+          {% endfor %}
+          }
+          {%endfor%}
+    }
+</script>
+  {% include "footer.html" %}
